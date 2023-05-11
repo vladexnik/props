@@ -1,6 +1,6 @@
 
 import './App.css';
-import { Component,Fragment } from 'react';
+import React, { Component,Fragment } from 'react';
 import styled from 'styled-components';
 
 
@@ -35,7 +35,7 @@ class WhoAmI extends Component{
     constructor(props){
       super(props);
       this.state={
-          years: 262,
+          years: 1019,
           text: "add 1 ",
           position: ''
 
@@ -97,6 +97,82 @@ class WhoAmI extends Component{
 // }
 
 
+const Greating=(props)=>{
+  return(
+    <div className={'mb-3 p-3 border border-'+props.color}>
+      {React.Children.map(props.children, child=>{
+        return React.cloneElement(child, {className: 'shadow p-3 m-3 border rounded'})
+      })}
+    </div>
+  )
+}
+
+const Message=(props)=>{
+  return(
+    <h2> The counter is {props.counterMes}</h2>
+  )
+}
+
+class Counter extends Component{
+  state={
+    counter:0
+  }
+
+
+  changeCounter=()=>{
+    this.setState(({counter})=>({
+      counter: counter+1
+    }))
+  }
+
+  render(){
+    return(
+      <>
+        <button
+        className={'btn btn-primary'}
+        onClick={this.changeCounter}>
+          Click it now</button>
+          {this.props.render(this.state.counter)}
+      </>
+    )
+  }
+}
+
+class Mouse extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.state = { x: 0, y: 0 };
+  }
+
+  handleMouseMove(event) {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY
+    });
+  }
+
+  render() {
+    return (
+      <div style={{ height: '20vh' }} onMouseMove={this.handleMouseMove}>
+
+        {/* ...но как можно отрендерить что-то, кроме <p>? */}
+        <p>Текущее положение курсора мыши: ({this.state.x}, {this.state.y})</p>
+      </div>
+    );
+  }
+}
+
+class MouseTracker extends React.Component {
+  render() {
+    return (
+      <>
+        <h1>Перемещайте курсор мыши!</h1>
+        <Mouse />
+      </>
+    );
+  }
+}
 
 const Wrapper=styled.div`
   width: 600px;
@@ -109,6 +185,14 @@ const Wrapper=styled.div`
 function App() {
   return (
     <Wrapper>
+      <MouseTracker/>
+      <Counter render={counterr=>(
+        <Message counterMes={counterr}/>
+      )}/>
+      <Greating color='info'>
+        <h2>nothing lasts forever</h2>
+        <h2>i go and do always</h2>
+      </Greating>
       <WhoAmI name={'JONNNy'} surname="Lamp" link="facebook.com"/>
       <WhoAmI name={'sLIM sHADY'} surname="eMIN" link="VK.COM"/>
 
